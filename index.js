@@ -1,11 +1,37 @@
-const http = require('node:http');
-const hostname = '127.0.0.1';
-const port = 3000;
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
+const express = require("express");
+
+// import model
+const students = require("./model");
+const server = express();
+
+server.use(express.json());
+
+// get endpoint
+server.get("/", function (req, res) {
+  res.json("hello from express");
 });
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+
+// get all students
+server.get("/api/students", (req, res) => {
+  students
+    .getAllStudents()
+    .then((students) => {
+      res.json(students);
+    })
+    .catch((error) => {
+      req.status(400).json({message: "couldn't get students"});
+      // res.json(error);
+    });
+});
+
+// get one student
+server.get("/api/student", (req, res) => {
+  let id = req.params
+  students.findById(id).then((students) => {res.json(students);}).catch((error) => {
+
+})
+
+const port = 3000;
+server.listen(port, () => {
+  console.log("server started");
 });
