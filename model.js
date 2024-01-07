@@ -1,7 +1,13 @@
+import { nanoid } from 'nanoid'
+
+function getNanoid() {
+    return nanoid().slice(0, 5)
+};
+
 let students = [
-    {id: 1, name: 'Mohamed', school: 'Alrashad', grade: 'A', age: 21},
-    {id: 2, name: 'Faarah', school: 'Albiri', grade: 'b', age: 23},
-    {id: 3, name: 'Fadumo', school: 'Albiri', grade: 'c', age: 29},
+    {id: nanoid(), name: 'Mohamed', school: 'Alrashad', grade: 'A', age: 21},
+    {id: nanoid(), name: 'Faarah', school: 'Albiri', grade: 'b', age: 23},
+    {id: nanoid(), name: 'Fadumo', school: 'Albiri', grade: 'c', age: 29},
 ];
 
 module.exports = {
