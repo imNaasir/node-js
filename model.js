@@ -1,23 +1,55 @@
-import { nanoid } from 'nanoid'
+const nanoid = require("nanoid");
 
-function getNanoid() {
-    return nanoid().slice(0, 5)
-};
+function getId() {
+  return nanoid().slice(0, 5);
+}
 
 let students = [
-    {id: nanoid(), name: 'Mohamed', school: 'Alrashad', grade: 'A', age: 21},
-    {id: nanoid(), name: 'Faarah', school: 'Albiri', grade: 'b', age: 23},
-    {id: nanoid(), name: 'Fadumo', school: 'Albiri', grade: 'c', age: 29},
+  { id: getId(), name: "Mohamed", school: "Alrashad", grade: "A", age: 21 },
+  { id: getId(), name: "Faarah", school: "Albiri", grade: "b", age: 23 },
+  { id: getId(), name: "Fadumo", school: "Albiri", grade: "c", age: 29 },
 ];
 
 module.exports = {
-    async getAllStudents() {
-        return students
-    },
+  async getAllStudents() {
+    return students;
+  },
 
-    // get one student
-    async findById(id) {
-        const student = students.find(student => student.id === id);
-        return student
-    }
-}
+  // get one student
+  async findById(id) {
+    const student = students.find((student) => student.id === id);
+    return student;
+  },
+
+  // add students
+  async add_student({ name, school, grade, age }) {
+    const newStudent = {
+      id: getId(),
+      name: name,
+      school: school,
+      grade: grade,
+      age: age,
+    };
+    students.push(newStudent);
+    return newStudent;
+  },
+
+  // update student
+  async update(id, changes) {
+    const student = students.find((student) => student.id === id);
+    console.log(student);
+
+    const updatedStudent = { ...changes, id };
+    students = students.map((student) =>
+      student.id === id ? updatedStudent : student
+    );
+    return updatedStudent;
+  },
+
+  //   delete student
+  async deleteStudent(id) {
+    const student = students.find((student) => student.id === id);
+    students = students.filter((student) => student.id !== id);
+    return student;
+  },
+};

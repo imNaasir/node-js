@@ -26,15 +26,13 @@ server.get("/api/students", (req, res) => {
 
 // get one student
 server.get("/api/students/:id", (req, res) => {
-  let {id} = req.params;
+  let { id } = req.params;
   let studentId = Number(id);
   // console.log("id");
   // console.log(studentId);
   students
     .findById(studentId)
     .then((student) => {
-
-      
       // res.status(200).json({ message: `student ${id} founded successfully` });
       if (student == null) {
         res.status(404).json({ message: `student ${id} not found` });
@@ -45,6 +43,23 @@ server.get("/api/students/:id", (req, res) => {
     .catch((error) => {
       res.status(500).json({ message: `student ${id} could not be found` });
     });
+});
+
+// add student
+server.get("/api/students", (req, res) => {
+  let body = req.body;
+  if (!body.name) {
+    res.status(500).json({ message: "name is required" });
+  } else {
+    students
+      .add_student(body)
+      .then((student) => {
+        res.status(200).json(student);
+      })
+      .catch(() => {
+        res.status(500).json({ message: "could not create student" });
+      });
+  }
 });
 
 const port = 3000;
