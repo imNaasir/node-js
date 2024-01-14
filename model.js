@@ -1,30 +1,24 @@
-const nanoid = require("nanoid");
-
-function getId() {
-  return nanoid().slice(0, 5);
-}
-
 let students = [
-  { id: getId(), name: "Mohamed", school: "Alrashad", grade: "A", age: 21 },
-  { id: getId(), name: "Faarah", school: "Albiri", grade: "b", age: 23 },
-  { id: getId(), name: "Fadumo", school: "Albiri", grade: "c", age: 29 },
+  { id: 1, name: "Mohamed", school: "Alrashad", grade: "A", age: 21 },
+  { id: 2, name: "Faarah", school: "Albiri", grade: "b", age: 23 },
+  { id: 3, name: "Fadumo", school: "Albiri", grade: "c", age: 29 },
 ];
+
+let nextId = 4; // Initialize nextId with the next available id
 
 module.exports = {
   async getAllStudents() {
     return students;
   },
 
-  // get one student
   async findById(id) {
     const student = students.find((student) => student.id === id);
     return student;
   },
 
-  // add students
   async add_student({ name, school, grade, age }) {
     const newStudent = {
-      id: getId(),
+      id: nextId++,
       name: name,
       school: school,
       grade: grade,
@@ -34,22 +28,29 @@ module.exports = {
     return newStudent;
   },
 
-  // update student
-  async update(id, changes) {
+  async update_student(id, changes) {
+    id = Number(id); // Convert id to a number if it's a string
+    console.log(id);
+
     const student = students.find((student) => student.id === id);
     console.log(student);
 
+    if (!student) {
+      return null; // If the student with the given id is not found
+    }
+
     const updatedStudent = { ...changes, id };
-    students = students.map((student) =>
-      student.id === id ? updatedStudent : student
-    );
+    students = students.map((s) => (s.id === id ? updatedStudent : s));
     return updatedStudent;
   },
 
-  //   delete student
   async deleteStudent(id) {
-    const student = students.find((student) => student.id === id);
-    students = students.filter((student) => student.id !== id);
-    return student;
+    const studentIndex = students.find((student) => student.id === id);
+    if (studentIndex !== -1) {
+      const deletedStudent = students.splice(studentIndex, 1);
+      return deletedStudent[0];
+    } else {
+      return null; // If the student with the given id is not found
+    }
   },
 };
